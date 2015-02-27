@@ -36,5 +36,20 @@ return array(
 		'template_path_stack' => array(
 			'album' => __DIR__ . '/../view',
 		),
-	)
+	),
+
+	'doctrine' => array(
+		'driver' => array(
+			'vacancies_driver' => array(
+				'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+				'cache' => 'array',
+				'paths' => array(__DIR__ . '/../src/Vacancies/Entity')
+			),
+			'orm_default' => array(
+				'drivers' => array(
+					'Vacancies\Entity' => 'vacancies_driver'
+				)
+			)
+		)
+	),
 );
