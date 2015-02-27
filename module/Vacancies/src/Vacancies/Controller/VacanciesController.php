@@ -9,6 +9,11 @@ namespace Vacancies\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Vacancies\Entity\Vacancies;
+use Vacancies\Entity\VacancyContents;
+use Vacancies\Entity\Departments;
+use Vacancies\Entity\DepartmentContents;
+use Vacancies\Entity\Languages;
 
 class VacanciesController extends AbstractActionController
 {
