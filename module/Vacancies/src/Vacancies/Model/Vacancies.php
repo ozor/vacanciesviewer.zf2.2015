@@ -32,7 +32,7 @@ class Vacancies
 
 
 
-    public function getVacancies($lang_id, $department_id = null)
+    public function getFilteredVacancies($lang_id, $department_id = null)
     {
         $where = 'vc.languageId = ?1';
         $parameters = array(1 => (int)$lang_id);
@@ -50,30 +50,5 @@ class Vacancies
 
         $vacancies->execute();
         return $vacancies;
-    }
-
-    public function getDepartments($lang_id)
-    {
-        $departments = $this->getEntityManager()->createQueryBuilder('Vacancies\Entity\Departments')
-            ->select('d.id, dc.title')
-            ->from('Vacancies\Entity\Departments', 'd')
-            ->join('Vacancies\Entity\DepartmentContents', 'dc', 'WITH', 'd.id = dc.departmentId')
-            ->where('dc.languageId = :languageId')
-            ->getQuery()
-            ->setParameters(array('languageId' => (int)$lang_id));
-
-        $departments->execute();
-        return $departments;
-    }
-
-    public function getLanguages()
-    {
-        $departments = $this->getEntityManager()->createQueryBuilder('Vacancies\Entity\Languages')
-            ->select('l.id, l.name')
-            ->from('Vacancies\Entity\Languages', 'l')
-            ->getQuery();
-
-        $departments->execute();
-        return $departments;
     }
 }

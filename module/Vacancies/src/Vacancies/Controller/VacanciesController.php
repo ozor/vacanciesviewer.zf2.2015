@@ -12,6 +12,7 @@ use Zend\View\Model\ViewModel;
 use Zend\Db\TableGateway;
 use Vacancies\Form;
 use Vacancies\Form\FilterForm;
+use Vacancies\Model;
 
 class VacanciesController extends AbstractActionController
 {
@@ -21,7 +22,6 @@ class VacanciesController extends AbstractActionController
     {
 		/** @var \Zend\Http\Request $request */
 		$request = $this->getRequest();
-		$model   = $this->getModel();
 
 		$language_id   = $request->getQuery('languages', 1);
 		$department_id = $request->getQuery('departments', null);
@@ -29,7 +29,7 @@ class VacanciesController extends AbstractActionController
 		$form  = new FilterForm();
 
 
-		$departments = $model->getDepartments($language_id)->getResult();
+		$departments = $this->getModel('Departments')->getFilteredDepartments($language_id)->getResult();
 		$dep_options = ['' => ''];
 		foreach ($departments as $department)
 		{
@@ -41,7 +41,7 @@ class VacanciesController extends AbstractActionController
 		$form->get('departments')->setValueOptions($dep_options);
 
 
-		$languages = $model->getLanguages()->getResult();
+		$languages = $this->getModel('Languages')->getAllLanguages()->getResult();
 		$lang_options = ['' => ''];
 		foreach ($languages as $language)
 		{
@@ -53,8 +53,7 @@ class VacanciesController extends AbstractActionController
 		$form->get('languages')->setValueOptions($lang_options);
 
 
-		/** @var \Doctrine\ORM\Query $vacancies */
-		$vacancies = $model->getVacancies($language_id, $department_id);
+		$vacancies = $this->getModel('Vacancies')->getFilteredVacancies($language_id, $department_id)->getResult();
         return new ViewModel(array(
 			'title'     => 'Вакансии',
 			'form'      => $form,
@@ -62,7 +61,7 @@ class VacanciesController extends AbstractActionController
 				'departments' => $department_id,
 				'languages'   => $language_id,
 			],
-			'vacancies' => $vacancies->getResult()
+			'vacancies' => $vacancies
 		));
 	}
 
@@ -72,35 +71,36 @@ class VacanciesController extends AbstractActionController
 		$request = $this->getRequest();
 
 		return new ViewModel(array(
-			'title'     => 'Вакансии'
+			'title' => 'Вакансии'
 		));
 	}
 
 	public function editAction()
 	{
 		return new ViewModel(array(
-			'title'     => 'Вакансии'
+			'title' => 'Вакансии'
 		));
 	}
 
 	public function deleteAction()
 	{
 		return new ViewModel(array(
-			'title'     => 'Вакансии'
+			'title' => 'Вакансии'
 		));
 	}
 
 	/**
-	 * @return \Vacancies\Model\Vacancies
+	 * @return \Vacancies\Model\Vacancies | \Vacancies\Model\Languages | \Vacancies\Model\Departments
 	 */
-	public function getModel()
+	private function getModel($modelName)
 	{
-		if ( is_null($this->model) ) {
-			if ( is_null($this->em) ) {
-				$this->em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+		if ( empty($this->model[$modelName]) ) {
+			if ( empty($this->em[$modelName]) ) {
+				$this->em[$modelName] = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
 			}
-			$this->model = new \Vacancies\Model\Vacancies($this->em);
+			$namespace = 'Vacancies\\Model\\' . $modelName;
+			$this->model[$modelName] = new $namespace($this->em[$modelName]);
 		}
-		return $this->model;
+		return $this->model[$modelName];
 	}
 }
