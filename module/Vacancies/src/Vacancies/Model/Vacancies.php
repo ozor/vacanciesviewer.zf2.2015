@@ -32,13 +32,13 @@ class Vacancies
 
 
 
-    public function getFilteredVacancies($lang_id, $department_id = null)
+    public function getVacancies($languageId, $departmentId = null)
     {
         $where = 'vc.languageId = ?1';
-        $parameters = array(1 => (int)$lang_id);
-        if ( !empty($department_id) && (int)$department_id > 0 ) {
+        $parameters = array(1 => (int)$languageId);
+        if ( !empty($departmentId) && (int)$departmentId > 0 ) {
             $where .= ' AND v.departmentId = :departmentId';
-            $parameters['departmentId'] = (int)$department_id;
+            $parameters['departmentId'] = (int)$departmentId;
         }
 
         $vacancies = $this->getEntityManager()->createQueryBuilder('Vacancies\Entity\Vacancies')

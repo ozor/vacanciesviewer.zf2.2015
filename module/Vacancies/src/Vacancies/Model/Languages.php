@@ -30,7 +30,7 @@ class Languages
         return $this->em->getRepository($repositoryName);
     }
 
-    public function getAllLanguages()
+    public function getLanguages()
     {
         $departments = $this->getEntityManager()->createQueryBuilder('Vacancies\Entity\Languages')
             ->select('l.id, l.name')

@@ -9,18 +9,28 @@ namespace Vacancies\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Vacancies\Form;
+use Vacancies\Form\FilterForm;
 use Vacancies\Model;
 
-class VacanciesController extends AbstractActionController
+class DepartmentsController extends AbstractActionController
 {
     protected $em, $model;
 
     public function indexAction()
     {
-        $languages = $this->getModel('Languages')->getAllLanguages()->getResult();
+        /** @var \Zend\Http\Request $request */
+        $request = $this->getRequest();
+
+        $form  = new FilterForm();
+
+        $languageId = $request->getQuery('languages', 1);
+        $languages  = $this->getModel('Departments')->getDepartments($languageId)->getResult();
         return new ViewModel(array(
             'title'     => 'Языки',
+            'form'      => $form,
+            'filter'    => [
+                'languages' => $languageId,
+            ],
             'languages' => $languages,
         ));
     }
@@ -31,7 +41,7 @@ class VacanciesController extends AbstractActionController
         $request = $this->getRequest();
 
         return new ViewModel(array(
-            'title'    => 'Языки',
+            'title'    => 'Отделы',
 //            'form'     => $form,
             'language' => '',
         ));
@@ -43,7 +53,7 @@ class VacanciesController extends AbstractActionController
         $request = $this->getRequest();
 
         return new ViewModel(array(
-            'title'    => 'Языки',
+            'title'    => 'Отделы',
 //            'form'     => $form,
             'language' => '',
         ));
@@ -55,7 +65,7 @@ class VacanciesController extends AbstractActionController
         $request = $this->getRequest();
 
         return new ViewModel(array(
-            'title' => 'Языки'
+            'title' => 'Отделы'
         ));
     }
 

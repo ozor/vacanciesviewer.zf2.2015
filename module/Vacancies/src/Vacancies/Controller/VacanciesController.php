@@ -9,8 +9,6 @@ namespace Vacancies\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Zend\Db\TableGateway;
-use Vacancies\Form;
 use Vacancies\Form\FilterForm;
 use Vacancies\Model;
 
@@ -23,43 +21,43 @@ class VacanciesController extends AbstractActionController
 		/** @var \Zend\Http\Request $request */
 		$request = $this->getRequest();
 
-		$language_id   = $request->getQuery('languages', 1);
-		$department_id = $request->getQuery('departments', null);
+		$languageId   = $request->getQuery('languages', 1);
+		$departmentId = $request->getQuery('departments', null);
 
 		$form  = new FilterForm();
 
 
-		$departments = $this->getModel('Departments')->getFilteredDepartments($language_id)->getResult();
-		$dep_options = ['' => ''];
+		$departments = $this->getModel('Departments')->getDepartments($languageId)->getResult();
+		$departmentOptions = ['' => ''];
 		foreach ($departments as $department)
 		{
 			$key = $department["id"];
 			$val = $department["title"];
 
-			$dep_options[$key] = $val;
+			$departmentOptions[$key] = $val;
 		}
-		$form->get('departments')->setValueOptions($dep_options);
+		$form->get('departments')->setValueOptions($departmentOptions);
 
 
-		$languages = $this->getModel('Languages')->getAllLanguages()->getResult();
-		$lang_options = ['' => ''];
+		$languages = $this->getModel('Languages')->getLanguages()->getResult();
+		$languageOptions = ['' => ''];
 		foreach ($languages as $language)
 		{
 			$key = $language["id"];
 			$val = $language["name"];
 
-			$lang_options[$key] = $val;
+			$languageOptions[$key] = $val;
 		}
-		$form->get('languages')->setValueOptions($lang_options);
+		$form->get('languages')->setValueOptions($languageOptions);
 
 
-		$vacancies = $this->getModel('Vacancies')->getFilteredVacancies($language_id, $department_id)->getResult();
+		$vacancies = $this->getModel('Vacancies')->getVacancies($languageId, $departmentId)->getResult();
         return new ViewModel(array(
 			'title'     => 'Вакансии',
 			'form'      => $form,
 			'filter'    => [
-				'departments' => $department_id,
-				'languages'   => $language_id,
+				'departments' => $departmentId,
+				'languages'   => $languageId,
 			],
 			'vacancies' => $vacancies
 		));

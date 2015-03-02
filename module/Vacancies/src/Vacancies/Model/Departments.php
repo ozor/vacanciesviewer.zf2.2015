@@ -30,7 +30,7 @@ class Departments
         return $this->em->getRepository($repositoryName);
     }
 
-    public function getFilteredDepartments($lang_id)
+    public function getDepartments($languageId)
     {
         $departments = $this->getEntityManager()->createQueryBuilder('Vacancies\Entity\Departments')
             ->select('d.id, dc.title')
@@ -38,7 +38,7 @@ class Departments
             ->join('Vacancies\Entity\DepartmentContents', 'dc', 'WITH', 'd.id = dc.departmentId')
             ->where('dc.languageId = :languageId')
             ->getQuery()
-            ->setParameters(array('languageId' => (int)$lang_id));
+            ->setParameters(array('languageId' => (int)$languageId));
 
         $departments->execute();
         return $departments;

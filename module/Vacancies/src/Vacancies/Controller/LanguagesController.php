@@ -9,16 +9,15 @@ namespace Vacancies\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Vacancies\Form;
 use Vacancies\Model;
 
-class VacanciesController extends AbstractActionController
+class LanguagesController extends AbstractActionController
 {
     protected $em, $model;
 
     public function indexAction()
     {
-        $languages = $this->getModel('Departments')->getAllDepartments()->getResult();
+        $languages = $this->getModel('Languages')->getLanguages()->getResult();
         return new ViewModel(array(
             'title'     => 'Языки',
             'languages' => $languages,
