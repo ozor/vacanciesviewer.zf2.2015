@@ -1,4 +1,42 @@
-
+<?php
+/** @var array $vacancies */
+/** @var string $title */
+/** @var array $filter */
+/** @var Vacancies\Form\FilterForm $form */
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
 <div class="row">
+<?php
+    $form->setAttribute('method', 'get');
+    $form->prepare();
+    echo $this->form()->openTag($form);
+    echo $this->formRow($form->get('languages')->setValue($filter['languages']));
+    echo $this->formRow($form->get('departments')->setValue($filter['departments']));
+    echo $this->formRow($form->get('submit'));
+    echo $this->form()->closeTag();
 
+?>
 </div>
+<p>
+    <a href="<?php echo $this->url('vacancies', array('action'=>'add'));?>">Добавить вакансию</a>
+</p>
+
+<table class="table">
+    <tr>
+        <th>Вакансия</th>
+        <th>Описание</th>
+        <th>&nbsp;</th>
+    </tr>
+    <?php foreach ($vacancies as $vacancy) : ?>
+        <tr>
+            <td><?php echo $this->escapeHtml($vacancy['title']);?></td>
+            <td><?php echo $this->escapeHtml($vacancy['content']);?></td>
+            <td>
+                <a href="<?php echo $this->url('vacancies',
+                    array('action'=>'edit', 'id' => $vacancy['id']));?>">Редактировать</a>
+                <a href="<?php echo $this->url('vacancies',
+                    array('action'=>'delete', 'id' => $vacancy['id']));?>">Удалить</a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</table>
