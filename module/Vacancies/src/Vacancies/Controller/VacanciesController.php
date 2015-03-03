@@ -56,8 +56,8 @@ class VacanciesController extends AbstractActionController
 			'title'     => 'Вакансии',
 			'form'      => $form,
 			'filter'    => [
-				'departments' => $departmentId,
-				'languages'   => $languageId,
+				'department' => $departmentId,
+				'language'   => $languageId,
 			],
 			'vacancies' => $vacancies
 		));
