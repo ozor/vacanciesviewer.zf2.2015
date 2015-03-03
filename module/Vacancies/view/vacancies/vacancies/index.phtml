@@ -10,11 +10,10 @@
     $form->setAttribute('method', 'get');
     $form->prepare();
     echo $this->form()->openTag($form);
-    echo $this->formRow($form->get('languages')->setValue($filter['languages']));
-    echo $this->formRow($form->get('departments')->setValue($filter['departments']));
+    echo $this->formRow($form->get('languages')->setValue($filter['language']));
+    echo $this->formRow($form->get('departments')->setValue($filter['department']));
     echo $this->formRow($form->get('submit'));
     echo $this->form()->closeTag();
-
 ?>
 </div>
 <p>
