@@ -23,15 +23,26 @@ class DepartmentsController extends AbstractActionController
 
         $form  = new FilterForm();
 
+        $languages = $this->getModel('Languages')->getLanguages()->getResult();
+        $languageOptions = ['' => ''];
+        foreach ($languages as $language)
+        {
+            $key = $language["id"];
+            $val = $language["name"];
+
+            $languageOptions[$key] = $val;
+        }
+        $form->get('languages')->setValueOptions($languageOptions);
+
         $languageId = $request->getQuery('languages', 1);
-        $languages  = $this->getModel('Departments')->getDepartments($languageId)->getResult();
+        $departments  = $this->getModel('Departments')->getDepartments($languageId)->getResult();
         return new ViewModel(array(
             'title'     => 'Языки',
             'form'      => $form,
             'filter'    => [
-                'languages' => $languageId,
+                'language' => $languageId,
             ],
-            'languages' => $languages,
+            'departments' => $departments,
         ));
     }
 
