@@ -8,7 +8,9 @@
 return array(
 	'controllers' => array(
 		'invokables' => array(
-			'Vacancies\Controller\Vacancies' => 'Vacancies\Controller\VacanciesController',
+			'Vacancies\Controller\Vacancies'   => 'Vacancies\Controller\VacanciesController',
+			'Vacancies\Controller\Languages'   => 'Vacancies\Controller\LanguagesController',
+			'Vacancies\Controller\Departments' => 'Vacancies\Controller\DepartmentsController',
 		),
 	),
 
@@ -25,6 +27,34 @@ return array(
 					),
 					'defaults' => array(
 						'controller' => 'Vacancies\Controller\Vacancies',
+						'action'     => 'index',
+					),
+				),
+			),
+			'languages' => array(
+				'type'    => 'segment',
+				'options' => array(
+					'route'    => '/languages[/:action][/:id]',
+					'constraints' => array(
+						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+						'id'     => '[0-9]+',
+					),
+					'defaults' => array(
+						'controller' => 'Vacancies\Controller\Languages',
+						'action'     => 'index',
+					),
+				),
+			),
+			'departments' => array(
+				'type'    => 'segment',
+				'options' => array(
+					'route'    => '/departments[/:action][/:id]',
+					'constraints' => array(
+						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+						'id'     => '[0-9]+',
+					),
+					'defaults' => array(
+						'controller' => 'Vacancies\Controller\Departments',
 						'action'     => 'index',
 					),
 				),
